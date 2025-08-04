@@ -87,11 +87,11 @@ class RobosuiteExperiment:
 
         if self._config.source_video_path:
             source_agent_args.append("--video_path")
-            source_agent_args.append(self._config.source_gripper_type)
+            source_agent_args.append(self._config.source_video_path)
 
         if self._config.target_video_path:
             target_agent_args.append("--video_path")
-            target_agent_args.append(self._config.target_gripper_type)
+            target_agent_args.append(self._config.target_video_path)
         
         if self._config.enable_inpainting:
             source_agent_args.append("--inpaint_enabled")
