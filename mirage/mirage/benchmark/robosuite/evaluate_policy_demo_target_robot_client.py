@@ -382,11 +382,17 @@ class TargetRobot(Robot):
             if self.render:
                 self.env.render(mode="human", camera_name=camera_names[0]) # on-screen rendering can only support one camera
             if self.write_video:
+                
                 if video_count % video_skip == 0:
                     video_img = []
                     for cam_name in camera_names:
                         video_img.append(self.env.render(mode="rgb_array", height=512, width=512, camera_name=cam_name))
                     video_img = np.concatenate(video_img, axis=1) # concatenate horizontally
+                    #save video frame
+                    img_to_save = video_img
+                    if img_to_save.dtype != np.uint8:
+                        img_to_save = (img_to_save * 255).astype(np.uint8)
+                    cv2.imwrite(f"{self.save_stats_path}/video_frame_{video_count}.png", cv2.cvtColor(img_to_save, cv2.COLOR_RGB2BGR))
                     self.video_writer.append_data(video_img)
 
                 video_count += 1
