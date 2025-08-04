@@ -12,7 +12,7 @@ def main():
     print("Loading config from: ", args.config)
     config = ExperimentRobotsuiteConfig.from_yaml(args.config)
     print(config)
-    should_launch = "y" if args.y else input("Launch the experiment? [Y/n] ")
+    should_launch = "y"# if args.y else input("Launch the experiment? [Y/n] ")
     if should_launch.lower() != "y":
         print("Exiting...")
         return
@@ -22,7 +22,7 @@ def main():
     try:
         new_experiment.launch()
     except ValueError as e:
-        should_override = "y" if args.y else input("Results folder already exists. Override? [Y/n] ")
+        should_override = "y"# if args.y else input("Results folder already exists. Override? [Y/n] ")
         if should_override.lower() != "y":
             print("Exiting...")
             return
