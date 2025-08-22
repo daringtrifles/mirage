@@ -85,7 +85,7 @@ class Data:
 tracking_error_history = []
 
 class Robot:
-    def __init__(self, robot_name=None, ckpt_path=None, render=False, video_path=None, rollout_horizon=None, seed=None, dataset_path=None, demo_path=None, inpaint_enabled=False, save_paired_images=False, save_paired_images_folder_path=None, device=None, save_failed_demos=False, gripper_types=None, save_stats_path=None):
+    def __init__(self, robot_name=None, ckpt_path=None, render=False, video_path=None, rollout_horizon=None, seed=None, dataset_path=None, demo_path=None, inpaint_enabled=False, save_paired_images=False, save_paired_images_folder_path=None, device=None, save_failed_demos=False, gripper_types=None, save_stats_path=None, add_splotches=False):
         """_summary_
 
         Args:
@@ -121,6 +121,7 @@ class Robot:
         self.gripper_types = gripper_types
         print(gripper_types)
         self.save_stats_path = os.path.dirname(save_stats_path)
+        self.add_splotches = add_splotches
 
         self.inpaint_enabled = inpaint_enabled
         self.save_paired_images = save_paired_images
@@ -529,8 +530,8 @@ class Robot:
 
 
 class SourceRobot(Robot):
-    def __init__(self, robot_name=None, ckpt_path=None, render=False, video_path=None, rollout_horizon=None, seed=None, dataset_path=None, connection=None, port = 50007, passive=True, demo_path=None, inpaint_enabled=False, forward_dynamics_model_path='', save_paired_images=False, save_paired_images_folder_path=None, device=None, save_failed_demos=False, naive=False, save_stats_path=None):
-        super().__init__(robot_name=robot_name, ckpt_path=ckpt_path, render=render, video_path=video_path, rollout_horizon=rollout_horizon, seed=seed, dataset_path=dataset_path, demo_path=demo_path, inpaint_enabled=inpaint_enabled, save_paired_images=save_paired_images, save_paired_images_folder_path=save_paired_images_folder_path, device=device, save_failed_demos=save_failed_demos, save_stats_path=save_stats_path)
+    def __init__(self, robot_name=None, ckpt_path=None, render=False, video_path=None, rollout_horizon=None, seed=None, dataset_path=None, connection=None, port = 50007, passive=True, demo_path=None, inpaint_enabled=False, forward_dynamics_model_path='', save_paired_images=False, save_paired_images_folder_path=None, device=None, save_failed_demos=False, naive=False, save_stats_path=None, add_splotches=False):
+        super().__init__(robot_name=robot_name, ckpt_path=ckpt_path, render=render, video_path=video_path, rollout_horizon=rollout_horizon, seed=seed, dataset_path=dataset_path, demo_path=demo_path, inpaint_enabled=inpaint_enabled, save_paired_images=save_paired_images, save_paired_images_folder_path=save_paired_images_folder_path, device=device, save_failed_demos=save_failed_demos, save_stats_path=save_stats_path, add_splotches=add_splotches)
         
         if connection:
             HOST = 'localhost'
@@ -771,15 +772,16 @@ class SourceRobot(Robot):
             
             if self.naive:
                 target_img = np.load(f"{self.save_stats_path}/naive_input.npy", allow_pickle=True)
-                #target_img[0] = add_black_splotches(target_img[0], seed=self.seed)
-                #target_img[1] = add_black_splotches(target_img[1], seed=self.seed)
+                if self.add_splotches:
+                    target_img[0] = add_black_splotches(target_img[0], seed=self.seed)
+                    target_img[1] = add_black_splotches(target_img[1], seed=self.seed)
                 obs_copy = deepcopy(obs)
                 obs_copy["agentview_image"] = target_img
-                '''
+            
                 if not os.path.exists("/home/harshapolavaram/mirage/mirage/mirage/benchmark/robosuite/splotch"):
                     os.makedirs("/home/harshapolavaram/mirage/mirage/mirage/benchmark/robosuite/splotch")
                 cv2.imwrite(f"/home/harshapolavaram/mirage/mirage/mirage/benchmark/robosuite/splotch/naive_input_{self.cnt}.png", cv2.cvtColor(target_img[0].transpose(1, 2, 0), cv2.COLOR_RGB2BGR) * 255)
-                '''
+                print(f"/home/harshapolavaram/mirage/mirage/mirage/benchmark/robosuite/splotch/naive_input_{self.cnt}.png")
                 self.cnt += 1
                 action = self.policy(ob=obs_copy)
 
@@ -1146,8 +1148,13 @@ if __name__ == "__main__":
         action='store_true',
         help="Set this to true to have a naive highdim policy that passes in the rendered image to the ",
     )
+    parser.add_argument(
+        "--add_splotches",
+        action='store_true',
+        help="if True, add black splotches to the target robot camera images",
+    )
     args = parser.parse_args()
 
-    source_robot = SourceRobot(robot_name=args.robot_name, ckpt_path=args.agent, render=args.render, video_path=args.video_path, rollout_horizon=args.horizon, seed=None, dataset_path=args.dataset_path, passive=args.passive, port=args.port, connection=args.connection, demo_path=args.demo_path, inpaint_enabled=args.inpaint_enabled, save_paired_images=args.save_paired_images, save_paired_images_folder_path=args.save_paired_images_folder_path, forward_dynamics_model_path=args.forward_dynamics_model_path, device=args.device, save_failed_demos=args.save_failed_demos, save_stats_path=args.save_stats_path, naive=args.naive)
+    source_robot = SourceRobot(robot_name=args.robot_name, ckpt_path=args.agent, render=args.render, video_path=args.video_path, rollout_horizon=args.horizon, seed=None, dataset_path=args.dataset_path, passive=args.passive, port=args.port, connection=args.connection, demo_path=args.demo_path, inpaint_enabled=args.inpaint_enabled, save_paired_images=args.save_paired_images, save_paired_images_folder_path=args.save_paired_images_folder_path, forward_dynamics_model_path=args.forward_dynamics_model_path, device=args.device, save_failed_demos=args.save_failed_demos, save_stats_path=args.save_stats_path, naive=args.naive, add_splotches=args.add_splotches)
     source_robot.run_experiments(seeds=args.seeds, rollout_num_episodes=args.n_rollouts, video_skip=args.video_skip, camera_names=args.camera_names, dataset_obs=args.dataset_obs, save_stats_path=args.save_stats_path, tracking_error_threshold=args.tracking_error_threshold, num_iter_max=args.num_iter_max, inpaint_online_eval=args.inpaint_enabled)
 
