@@ -57,6 +57,9 @@ class ExperimentRobotsuiteConfig(ExperimentConfig):
     # Optional add_splotches parameter
     add_splotches: Optional[bool] = False
 
+    # Optional alter_lighting parameter - uses shadow_arena XMLs instead of regular arenas
+    alter_lighting: Optional[bool] = False
+
     def validate_config(self):
         """
         Validates the configuration to see if the values are feasible.
@@ -114,6 +117,7 @@ class ExperimentRobotsuiteConfig(ExperimentConfig):
         table.add_row(["Target Gripper Type", self.target_gripper_type])
         table.add_row(["Results Folder", self.results_folder])
         table.add_row(["Device", self.device])
+        table.add_row(["Alter Lighting", self.alter_lighting])
         return table.get_formatted_string()
     
     @staticmethod
@@ -151,5 +155,6 @@ class ExperimentRobotsuiteConfig(ExperimentConfig):
                 source_gripper_type=config.get("source_gripper_type"),
                 target_gripper_type=config.get("target_gripper_type"),
                 device=config.get("device", "cuda"),
-                add_splotches=config.get("add_splotches", False)
+                add_splotches=config.get("add_splotches", False),
+                alter_lighting=config.get("alter_lighting", False)
             )
