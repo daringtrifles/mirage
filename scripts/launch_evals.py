@@ -50,8 +50,8 @@ def generate_config(source_agent_path, target_agent_path, source_robot_name, tar
         'use_diffusion': False,
         'diffusion_input_type': "",
         'results_folder': results_folder,
-        'target_video_path': f"{source_robot_name}_{target_robot_name}_target_video.mp4",
-        'source_video_path': f"{source_robot_name}_{target_robot_name}_source_video.mp4"
+        'target_video_path': None,
+        'source_video_path': None
     }
     
     # Create results folder if it doesn't exist

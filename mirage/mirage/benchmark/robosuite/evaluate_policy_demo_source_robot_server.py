@@ -97,7 +97,7 @@ class Robot:
             seed (int, optional): 
             connection (socket, optional):
         """
-        self.cnt = 0
+        
         self.robot_name = robot_name
         self.ckpt_path = ckpt_path
         self.render = render
@@ -783,12 +783,6 @@ class SourceRobot(Robot):
                     target_img[1] = add_black_splotches(target_img[1], seed=self.seed)
                 obs_copy = deepcopy(obs)
                 obs_copy["agentview_image"] = target_img
-            
-                if not os.path.exists("/home/harshapolavaram/mirage/mirage/mirage/benchmark/robosuite/splotch"):
-                    os.makedirs("/home/harshapolavaram/mirage/mirage/mirage/benchmark/robosuite/splotch")
-                cv2.imwrite(f"/home/harshapolavaram/mirage/mirage/mirage/benchmark/robosuite/splotch/naive_input_{self.cnt}.png", cv2.cvtColor(target_img[0].transpose(1, 2, 0), cv2.COLOR_RGB2BGR) * 255)
-                print(f"/home/harshapolavaram/mirage/mirage/mirage/benchmark/robosuite/splotch/naive_input_{self.cnt}.png")
-                self.cnt += 1
                 action = self.policy(ob=obs_copy)
 
             action, r, done, success = self.step(action, use_delta=self.control_delta, blocking=False, name="Source Robot")
