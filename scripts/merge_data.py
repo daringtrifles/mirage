@@ -80,13 +80,13 @@ def merge_hdf5_files(input_files, output_file, task):
 
 if __name__ == "__main__":
     # List of input files
-    for task in ['two_piece_assembly']:
+    for task in ['can', 'lift', 'square', 'stack', 'two_piece_assembly']:
         robot_to_path = {
-            'Jaco': f"{task}/split_data/robotJaco.hdf5",
-            'Panda': f"{task}/split_data/robotPanda.hdf5",
-            'Sawyer': f"{task}/split_data/robotSawyer.hdf5",
-            'UR5e': f"{task}/split_data/robotUR5e.hdf5",
-            'Kinova3': f"{task}/split_data/robotKinova3.hdf5"
+            'Jaco': f"xembody_data/{task}/split_data/robotJaco.hdf5",
+            'Panda': f"xembody_data/{task}/split_data/robotPanda.hdf5",
+            'Sawyer': f"xembody_data/{task}/split_data/robotSawyer.hdf5",
+            'UR5e': f"xembody_data/{task}/split_data/robotUR5e.hdf5",
+            'Kinova3': f"xembody_data/{task}/split_data/robotKinova3.hdf5"
         }
         all = ['Jaco', 'Panda', 'Sawyer', 'UR5e', 'Kinova3']
         dct = {'all_minus_jaco': [i for i in all if i!='Jaco'],
@@ -98,8 +98,8 @@ if __name__ == "__main__":
         for name in dct.keys():
             input_files = [robot_to_path[robot] for robot in dct[name]]
             assert(len(input_files) == 4)
-            os.makedirs(f'{task}/merged_data', exist_ok=True)
-            output_file = f"{task}/merged_data/{name}_merged.hdf5".lower()
+            os.makedirs(f'xembody_data/{task}/merged_data', exist_ok=True)
+            output_file = f"xembody_data/{task}/merged_data/{name}_merged.hdf5".lower()
             merge_hdf5_files(input_files, output_file, task) 
         
 
@@ -112,6 +112,6 @@ if __name__ == "__main__":
             input_files = [robot_to_path[robot] for robot in robots_to_merge]
             
             # Output file
-            output_file = f"{task}/merged_data/{'_'.join(robots_to_merge)}_merged.hdf5".lower()
+            output_file = f"xembody_data/{task}/merged_data/{'_'.join(robots_to_merge)}_merged.hdf5".lower()
             
             merge_hdf5_files(input_files, output_file, task) 
