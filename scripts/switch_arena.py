@@ -14,8 +14,8 @@ import os
 import shutil
 from pathlib import Path
 
-# Base directory paths
-BASE_DIR = Path("/home/harshapolavaram/clean_code/sim_experiments/mirage/robosuite/robosuite/models/assets")
+# Base directory paths (relative from project root)
+BASE_DIR = Path("robosuite/robosuite/models/assets")
 ARENAS_DIR = BASE_DIR / "arenas"
 ORIGINAL_ARENAS_DIR = BASE_DIR / "original_arenas"  
 ALTERED_LIGHTING_ARENAS_DIR = BASE_DIR / "altered_lighting_arenas"

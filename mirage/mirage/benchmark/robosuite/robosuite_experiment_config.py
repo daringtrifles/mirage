@@ -54,8 +54,8 @@ class ExperimentRobotsuiteConfig(ExperimentConfig):
     # Optional device for evaluation
     device: Optional[str] = None
 
-    # Optional add_splotches parameter
-    add_splotches: Optional[bool] = False
+    # Optional add_patches parameter
+    add_patches: Optional[bool] = False
 
     def validate_config(self):
         """
@@ -151,5 +151,5 @@ class ExperimentRobotsuiteConfig(ExperimentConfig):
                 source_gripper_type=config.get("source_gripper_type"),
                 target_gripper_type=config.get("target_gripper_type"),
                 device=config.get("device", "cuda"),
-                add_splotches=config.get("add_splotches", False),
+                add_patches=config.get("add_patches", False),
             )

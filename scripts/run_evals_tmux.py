@@ -107,8 +107,8 @@ def main():
     
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Run evaluation commands in tmux with GPU management')
-    parser.add_argument('mode', choices=['splotch', 'lighting', 'standard'], 
-                       help='Evaluation mode: splotch, lighting, or standard')
+    parser.add_argument('mode', choices=['patch', 'lighting', 'standard'], 
+                       help='Evaluation mode: patch, lighting, or standard')
     
     args = parser.parse_args()
     

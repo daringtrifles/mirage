@@ -51,7 +51,7 @@ def test_results(exp_name, mode):
                 
                 for robot in robots:
                     robot_name = ROBOT_MAP[robot.lower()]
-                    if mode in ['splotch', 'lighting'] and robot_name != 'Panda':
+                    if mode in ['patch', 'lighting'] and robot_name != 'Panda':
                         continue
                     results_path = get_results_path(exp_name, robot_name, mode)
                     num_rollouts, num_success = find_results(results_path)
@@ -111,15 +111,15 @@ def main():
     
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Collect evaluation results by mode')
-    parser.add_argument('mode', nargs='?', choices=['splotch', 'lighting', 'standard', 'all'], 
-                       default='all', help='Evaluation mode: splotch, lighting, standard, or all (default: all)')
+    parser.add_argument('mode', nargs='?', choices=['patch', 'lighting', 'standard', 'all'], 
+                       default='all', help='Evaluation mode: patch, lighting, standard, or all (default: all)')
     parser.add_argument('--output', '-o', help='Output CSV filename (default: auto-generated)')
     
     args = parser.parse_args()
     
     # Determine which modes to process
     if args.mode == 'all':
-        modes_to_process = ['standard', 'splotch', 'lighting']
+        modes_to_process = ['standard', 'patch', 'lighting']
     else:
         modes_to_process = [args.mode]
     
@@ -133,7 +133,7 @@ def main():
         
         for exp_name in experiments:
             # Skip certain combinations based on create_mirage_configs.py logic
-            if mode in ['splotch', 'lighting'] and 'all_minus' in exp_name:
+            if mode in ['patch', 'lighting'] and 'all_minus' in exp_name:
                 continue
                 
             results = test_results(exp_name, mode)

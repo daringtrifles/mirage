@@ -116,9 +116,9 @@ class RobosuiteExperiment:
         if self._config.passive:
             source_agent_args.append("--passive")
 
-        if self._config.add_splotches:
-            source_agent_args.append("--add_splotches")
-            target_agent_args.append("--add_splotches")
+        if self._config.add_patches:
+            source_agent_args.append("--add_patches")
+            target_agent_args.append("--add_patches")
 
         self._source_process = subprocess.Popen(source_agent_args)
         self._target_process = subprocess.Popen(target_agent_args)

@@ -11,7 +11,7 @@ ROBOT_MAP = {
     'kinova3': 'Kinova3', 'jaco': 'Jaco', 'iiwa': 'IIWA'
 }
 standard_training_commands = []
-splotch_training_commands = []
+patch_training_commands = []
 lighting_training_commands = []
 
 def process_experiment(exp_name, mode):
@@ -30,7 +30,7 @@ def process_experiment(exp_name, mode):
                 # Process each robot (currently filtered to Panda only)
                 for robot in robots:
                     robot_name = ROBOT_MAP[robot.lower()]
-                    if mode in ['splotch', 'lighting']:
+                    if mode in ['patch', 'lighting']:
                         if robot_name != 'Panda': 
                             continue
                     create_config(exp_name, robot_name, mode)
@@ -90,7 +90,7 @@ def create_config(exp_name, robot, mode):
         'results_folder': results_folder,
         'target_video_path': 'br1.mp4',
         'source_video_path': 'br2.mp4',
-        'add_splotches': mode == 'splotch'
+        'add_patches': mode == 'patch'
     }
     
 
@@ -101,8 +101,8 @@ def create_config(exp_name, robot, mode):
     
     if mode == 'standard':
         standard_training_commands.append(f"python run_robosuite_benchmark.py --config {output_path}")
-    elif mode == 'splotch':
-        splotch_training_commands.append(f"python run_robosuite_benchmark.py --config {output_path}")
+    elif mode == 'patch':
+        patch_training_commands.append(f"python run_robosuite_benchmark.py --config {output_path}")
     elif mode == 'lighting':
         lighting_training_commands.append(f"python run_robosuite_benchmark.py --config {output_path}")
     
@@ -168,8 +168,8 @@ def main():
     experiments = get_experiment_list()
     
     for exp_name in experiments:
-        for mode in ['lighting', 'splotch', 'standard']:
-            if mode in ['splotch', 'lighting']:
+        for mode in ['lighting', 'patch', 'standard']:
+            if mode in ['patch', 'lighting']:
                 if 'all_minus' in exp_name:
                     continue
             process_experiment(exp_name, mode)
@@ -177,8 +177,8 @@ def main():
     with open('commands/standard_eval_commands.txt', encoding='utf-8', mode='w') as f:
         for command in standard_training_commands:
             f.write(command + '\n')
-    with open('commands/splotch_eval_commands.txt', encoding='utf-8', mode='w') as f:
-        for command in splotch_training_commands:
+    with open('commands/patch_eval_commands.txt', encoding='utf-8', mode='w') as f:
+        for command in patch_training_commands:
             f.write(command + '\n')
     with open('commands/lighting_eval_commands.txt', encoding='utf-8', mode='w') as f:
         for command in lighting_training_commands:
