@@ -85,7 +85,7 @@ class Data:
 tracking_error_history = []
 
 class Robot:
-    def __init__(self, robot_name=None, ckpt_path=None, render=False, video_path=None, rollout_horizon=None, seed=None, dataset_path=None, demo_path=None, inpaint_enabled=False, save_paired_images=False, save_paired_images_folder_path=None, device=None, save_failed_demos=False, gripper_types=None, save_stats_path=None, add_splotches=False, alter_lighting=False):
+    def __init__(self, robot_name=None, ckpt_path=None, render=False, video_path=None, rollout_horizon=None, seed=None, dataset_path=None, demo_path=None, inpaint_enabled=False, save_paired_images=False, save_paired_images_folder_path=None, device=None, save_failed_demos=False, gripper_types=None, save_stats_path=None, add_splotches=False):
         """_summary_
 
         Args:
@@ -119,15 +119,8 @@ class Robot:
         self.inpaint_writer = imageio.get_writer(os.path.join(os.path.dirname(self.video_path), "inpaint_video.mp4"), fps=20) if self.video_writer is not None else None
         self.save_failed_demos = save_failed_demos
         self.gripper_types = gripper_types
-        print(gripper_types)
         self.save_stats_path = os.path.dirname(save_stats_path)
         self.add_splotches = add_splotches
-        self.alter_lighting = alter_lighting
-
-        # Set global arena lighting setting if alter_lighting is enabled
-        if self.alter_lighting:
-            import robosuite.macros as macros
-            macros.USE_SHADOW_ARENA = True
 
         self.inpaint_enabled = inpaint_enabled
         self.save_paired_images = save_paired_images
@@ -536,8 +529,8 @@ class Robot:
 
 
 class SourceRobot(Robot):
-    def __init__(self, robot_name=None, ckpt_path=None, render=False, video_path=None, rollout_horizon=None, seed=None, dataset_path=None, connection=None, port = 50007, passive=True, demo_path=None, inpaint_enabled=False, forward_dynamics_model_path='', save_paired_images=False, save_paired_images_folder_path=None, device=None, save_failed_demos=False, naive=False, save_stats_path=None, add_splotches=False, alter_lighting=False):
-        super().__init__(robot_name=robot_name, ckpt_path=ckpt_path, render=render, video_path=video_path, rollout_horizon=rollout_horizon, seed=seed, dataset_path=dataset_path, demo_path=demo_path, inpaint_enabled=inpaint_enabled, save_paired_images=save_paired_images, save_paired_images_folder_path=save_paired_images_folder_path, device=device, save_failed_demos=save_failed_demos, save_stats_path=save_stats_path, add_splotches=add_splotches, alter_lighting=alter_lighting)
+    def __init__(self, robot_name=None, ckpt_path=None, render=False, video_path=None, rollout_horizon=None, seed=None, dataset_path=None, connection=None, port = 50007, passive=True, demo_path=None, inpaint_enabled=False, forward_dynamics_model_path='', save_paired_images=False, save_paired_images_folder_path=None, device=None, save_failed_demos=False, naive=False, save_stats_path=None, add_splotches=False):
+        super().__init__(robot_name=robot_name, ckpt_path=ckpt_path, render=render, video_path=video_path, rollout_horizon=rollout_horizon, seed=seed, dataset_path=dataset_path, demo_path=demo_path, inpaint_enabled=inpaint_enabled, save_paired_images=save_paired_images, save_paired_images_folder_path=save_paired_images_folder_path, device=device, save_failed_demos=save_failed_demos, save_stats_path=save_stats_path, add_splotches=add_splotches)
         
         if connection:
             HOST = 'localhost'
@@ -1153,13 +1146,8 @@ if __name__ == "__main__":
         action='store_true',
         help="if True, add black splotches to the target robot camera images",
     )
-    parser.add_argument(
-        "--alter_lighting",
-        action='store_true',
-        help="if True, use shadow arena XMLs instead of regular arena XMLs",
-    )
     args = parser.parse_args()
 
-    source_robot = SourceRobot(robot_name=args.robot_name, ckpt_path=args.agent, render=args.render, video_path=args.video_path, rollout_horizon=args.horizon, seed=None, dataset_path=args.dataset_path, passive=args.passive, port=args.port, connection=args.connection, demo_path=args.demo_path, inpaint_enabled=args.inpaint_enabled, save_paired_images=args.save_paired_images, save_paired_images_folder_path=args.save_paired_images_folder_path, forward_dynamics_model_path=args.forward_dynamics_model_path, device=args.device, save_failed_demos=args.save_failed_demos, save_stats_path=args.save_stats_path, naive=args.naive, add_splotches=args.add_splotches, alter_lighting=args.alter_lighting)
+    source_robot = SourceRobot(robot_name=args.robot_name, ckpt_path=args.agent, render=args.render, video_path=args.video_path, rollout_horizon=args.horizon, seed=None, dataset_path=args.dataset_path, passive=args.passive, port=args.port, connection=args.connection, demo_path=args.demo_path, inpaint_enabled=args.inpaint_enabled, save_paired_images=args.save_paired_images, save_paired_images_folder_path=args.save_paired_images_folder_path, forward_dynamics_model_path=args.forward_dynamics_model_path, device=args.device, save_failed_demos=args.save_failed_demos, save_stats_path=args.save_stats_path, naive=args.naive, add_splotches=args.add_splotches)
     source_robot.run_experiments(seeds=args.seeds, rollout_num_episodes=args.n_rollouts, video_skip=args.video_skip, camera_names=args.camera_names, dataset_obs=args.dataset_obs, save_stats_path=args.save_stats_path, tracking_error_threshold=args.tracking_error_threshold, num_iter_max=args.num_iter_max, inpaint_online_eval=args.inpaint_enabled)
 

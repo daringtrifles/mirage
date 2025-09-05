@@ -120,10 +120,6 @@ class RobosuiteExperiment:
             source_agent_args.append("--add_splotches")
             target_agent_args.append("--add_splotches")
 
-        if self._config.alter_lighting:
-            source_agent_args.append("--alter_lighting")
-            target_agent_args.append("--alter_lighting")
-
         self._source_process = subprocess.Popen(source_agent_args)
         self._target_process = subprocess.Popen(target_agent_args)
 
