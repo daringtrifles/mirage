@@ -49,18 +49,18 @@ def check_file_exists(file_path):
 
 def main():
     parser = argparse.ArgumentParser(description='Switch file_utils.py between eval and training versions')
-    parser.add_argument('version', choices=['eval', 'training'], 
-                       help='Version to switch to: eval or training')
+    parser.add_argument('version', choices=['eval', 'train'], 
+                       help='Version to switch to: eval or train')
     
     args = parser.parse_args()
     
     # Determine source file
     if args.version == 'eval':
         source_path = EVAL_VERSION_PATH
-        print("Switching to EVAL version of file_utils.py")
+        mirage_oxe_aug.yamlprint("Switching to eval version of file_utils.py")
     else:
         source_path = TRAINING_VERSION_PATH
-        print("Switching to TRAINING version of file_utils.py")
+        print("Switching to train version of file_utils.py")
     
     print(f"Source file: {source_path}")
     print(f"Target file: {FILE_UTILS_PATH}")
