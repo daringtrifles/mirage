@@ -15,7 +15,7 @@ def create_tmux_window(gpu_id, config_name):
     
     # Send the command to the new window
     config_path = f"robomimic-mirage/configs/{config_name}.json"
-    command = "source ~/.zshrc && conda activate mirage_clenaed && cd robomimic-mirage/robomimic/scripts"
+    command = "source ~/.zshrc && conda activate mirage_oxe_aug && cd robomimic-mirage/robomimic/scripts"
     command += f" && CUDA_VISIBLE_DEVICES={gpu_id} python train.py --config ../../../{config_path}; read -p 'Press Enter to close...'"
     subprocess.run(['tmux', 'send-keys', '-t', window_name, command, 'C-m'])
     

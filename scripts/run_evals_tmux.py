@@ -91,7 +91,7 @@ def run_command_in_tmux_window(session_name, window_name, command, gpu_id):
     # Setup environment: source zshrc, activate conda env, cd to correct directory, set GPU
     setup_commands = [
         'source ~/.zshrc',
-        'conda activate mirage_clenaed',
+        'conda activate mirage_oxe_aug',
         'cd mirage/mirage/benchmark/robosuite',
         f'export CUDA_VISIBLE_DEVICES={gpu_id}',
         command

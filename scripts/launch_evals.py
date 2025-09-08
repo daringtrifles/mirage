@@ -147,7 +147,7 @@ def create_config(exp_name, robot):
         print(f'didnt run {exp_name}_{robot}')
         sys.exit(1)
 
-    command = f'source ~/.zshrc && conda activate mirage_clenaed && cd mirage/mirage/benchmark/robosuite && CUDA_VISIBLE_DEVICES={gpu_id} python run_robosuite_benchmark.py --config {output_path}'
+    command = f'source ~/.zshrc && conda activate mirage_oxe_aug && cd mirage/mirage/benchmark/robosuite && CUDA_VISIBLE_DEVICES={gpu_id} python run_robosuite_benchmark.py --config {output_path}'
     command += f' && read -p "Press Enter to close..."'
     run_in_tmux(command, f'{exp_name}_{robot}')
 
