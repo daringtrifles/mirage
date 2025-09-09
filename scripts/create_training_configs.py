@@ -1,6 +1,5 @@
 import json
-import argparse
-import os
+import pandas as pd
 
 def create_config(name, dataset):
     # Read the template file
@@ -30,16 +29,9 @@ def create_config(name, dataset):
     return output_file
 
 def main():
-    parser = argparse.ArgumentParser(description='Create a new config file based on template.json')
-    parser.add_argument('--name', type=str, required=True, help='Name of the new config file (without .json extension)')
-    parser.add_argument('--dataset', type=str, required=True, help='Dataset path to use in the config')
-    
-    args = parser.parse_args()
-    
-    try:
-        create_config(args.name, args.dataset)
-    except Exception as e:
-        print(f"Error creating config file: {str(e)}")
+    experiments_to_run = pd.read_csv('experiments_to_run.csv')
+    for _, row in experiments_to_run.iterrows():
+        create_config(row['exp_name'], row['train_data_filepath'])
 
 if __name__ == "__main__":
     main() 
