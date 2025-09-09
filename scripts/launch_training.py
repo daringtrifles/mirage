@@ -2,8 +2,7 @@ import subprocess
 import sys
 import os
 import time
-
-from create_config import create_config
+import pandas as pd
 from find_least_used_gpu import find_least_used_gpu
 
 def create_tmux_window(gpu_id, config_name):
@@ -22,42 +21,26 @@ def create_tmux_window(gpu_id, config_name):
     # List all tmux windows
     print("\nCurrent tmux windows:")
     subprocess.run(['tmux', 'list-windows'])
+def launch_training(exp_name):
 
-def main():
+    gpu_info = find_least_used_gpu()
+    if  gpu_info['memory_utilization'] > 90 or gpu_info['memory_percent'] > 90:
+        print("GPU is too busy. Exiting...")
+        sys.exit(1)
+    csv_path = "experiments_to_run.csv"
+    df = pd.read_csv(csv_path)
 
-    if len(sys.argv) != 3:
-        print("Usage: python launch_dp_experiment.py <name> <dataset>")
-        sys.exit(1)
-    
-    exp_name = sys.argv[1]
-    dataset = sys.argv[2]
-    
-    try:
-        # Create the config file
-        print("Creating config file...")
-        config_path = create_config(exp_name, dataset)
+    for index, row in df.iterrows():
+        exp_name = row['exp_name']
+        train_data_filepath = row['train_data_filepath']
+        print(f'python scripts/launch_training.py {exp_name} ../../../{train_data_filepath}')
         
-        # Find the least used GPU
-        print("Finding least used GPU...")
-        
-        gpu_info = find_least_used_gpu()
-        
-        # Create tmux window and run the experiment
-        print(f"Creating tmux window and launching experiment on GPU {gpu_info['gpu_id']}...")
-        print(f"GPU Utilization: {gpu_info['gpu_utilization']}%")
-        print(f"Memory Usage: {gpu_info['memory_percent']:.1f}%")
-        
-        if gpu_info['gpu_utilization'] > 80 or gpu_info['memory_utilization'] > 80 or gpu_info['memory_percent'] > 80:
-            print("GPU is too busy. Exiting...")
-            sys.exit(1)
-        
-        create_tmux_window(gpu_info['gpu_id'], exp_name)
+    create_tmux_window(gpu_info['gpu_id'], exp_name)
         
         
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        sys.exit(1)
 
 if __name__ == "__main__":
-    main() 
-    time.sleep(20)
+    experiments_to_run = pd.read_csv('experiments_to_run.csv')
+    for _, row in experiments_to_run.iterrows():
+        launch_training(row['exp_name'])
+        time.sleep(20)

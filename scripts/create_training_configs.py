@@ -8,7 +8,7 @@ def create_config(name, dataset):
     
     # Update the algo_name
     template['experiment']['name'] = name
-    dataset = f'../../{dataset}'
+    dataset = f'../../../{dataset}'
     # Update the train/data/path in the template
     # train/data is a list containing dictionaries with path
     if 'train' in template and 'data' in template['train'] and isinstance(template['train']['data'], list):
