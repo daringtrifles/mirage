@@ -126,11 +126,10 @@ def main():
     experiments = get_experiment_list()
     
     
-    all_results = []
     
     # Process each mode and experiment combination
     for mode in modes_to_process:
-        
+        all_results = []
         for exp_name in experiments:
             # Skip certain combinations based on create_mirage_configs.py logic
             if mode in ['patch', 'lighting'] and 'all_minus' in exp_name:
@@ -139,27 +138,15 @@ def main():
             results = test_results(exp_name, mode)
             all_results.extend(results)
             
-    # Generate output filename
-    if args.output:
-        output_filename = args.output
-    else:
-        if args.mode == 'all':
-            output_filename = 'evaluation_results_all_modes.csv'
-        else:
-            output_filename = f'evaluation_results_{args.mode}_mode.csv'
+        output_filename = f'evaluation_results_{mode}_mode.csv'
     
-    # Write results to CSV
-    if all_results:
+        # Write results to CSV
         fieldnames = ['Exp Name', 'Robot', 'Mode', 'Num Rollouts', 'Num Success', 'Success Rate']
         os.makedirs('results', exist_ok=True)
         with open(f'results/{output_filename}', 'w', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(all_results)
-        
-        print(f"\nResults written to: {output_filename}")
-    else:
-        print("No results found!")
 
 if __name__ == "__main__":
     main()
