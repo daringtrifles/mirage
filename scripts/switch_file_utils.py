@@ -57,7 +57,7 @@ def main():
     # Determine source file
     if args.version == 'eval':
         source_path = EVAL_VERSION_PATH
-        mirage_oxe_aug.yamlprint("Switching to eval version of file_utils.py")
+        print("Switching to eval version of file_utils.py")
     else:
         source_path = TRAINING_VERSION_PATH
         print("Switching to train version of file_utils.py")
