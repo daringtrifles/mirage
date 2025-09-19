@@ -70,7 +70,7 @@ def create_config(exp_name, robot, mode):
         'source_agent_path': model_path,
         'target_agent_path': model_path,
         'naive': True,
-        'n_rollouts': 50,
+        'n_rollouts': 100,
         'horizon': 350,
         'seed': 0,
         'passive': True,
@@ -88,8 +88,8 @@ def create_config(exp_name, robot, mode):
         'use_diffusion': False,
         'diffusion_input_type': "",
         'results_folder': results_folder,
-        'target_video_path': 'br1.mp4',
-        'source_video_path': 'br2.mp4',
+        'target_video_path': None,
+        'source_video_path': None,
         'add_patches': mode == 'patch'
     }
     
